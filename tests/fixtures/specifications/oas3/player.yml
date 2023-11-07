@@ -1,0 +1,149 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: API Test
+  license:
+    name: MIT
+paths:
+  /player:
+    get:
+      summary: Query the collection for a list of players.
+      operationId: crudl.list
+      x-resource: Player
+      x-controller: crudl
+      x-action: list
+      parameters:
+        - name: name
+          x-filter: attribute
+          in: query
+          description: Filter by player name.
+          required: false
+          style: deepObject
+          schema:
+            type: string
+        - name: age
+          x-filter: attribute
+          in: query
+          description: Filter by player age.
+          required: false
+          style: deepObject
+          schema:
+            type: integer
+            format: int32
+        - name: _limit
+          x-filter: limit
+          in: query
+          description: How many items to return in a single request
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: A paged list of Players
+          content:
+            application/json:    
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Player"
+    post:
+      summary: Create a new player resource.
+      operationId: crudl.create
+      x-resource: Player
+      x-controller: crudl
+      x-action: create
+      requestBody:
+        description: The player to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Player'
+      responses:
+        '201':
+          description: The player created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Player"
+    put:
+      summary: Update a player resource.
+      operationId: crudl.update
+      x-resource: Player
+      x-controller: crudl
+      x-action: update
+      requestBody:
+        description: The player to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Player'
+      responses:
+        '200':
+          description: The updated player.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Player"
+  /player/id/{id}:
+    get:
+      summary: Read a specific player resource.
+      operationId: crudl.read
+      x-resource: Player
+      x-controller: crudl
+      x-action: read
+      parameters:
+        - name: id
+          in: path
+          description: The player resource's ID.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: The player resource.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Player"
+    delete:
+      summary: Delete a specific player resource.
+      operationId: crudl.delete
+      x-resource: Player
+      x-controller: crudl
+      x-action: delete
+      parameters:
+        - name: id
+          in: path
+          description: The player resource's ID.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Indication that the resource is deleted.
+components:
+  schemas:
+    Player:
+      x-storage-engine: mysql
+      x-storage-name: player
+      required:
+        - id
+        - name
+        - age
+      properties:
+        id:
+          x-primary-key: true
+          type: integer
+          format: int64
+        name:
+          type: string
+        age:
+          type: integer
+          format: int64
+        isOnline:
+          type: boolean
