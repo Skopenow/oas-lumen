@@ -1,5 +1,5 @@
 {
-    "name": "danballance/oas-lumen",
+    "name": "skopenow/oas-lumen",
     "description": "A package for delivering a Lumen REST API from an Open API Schema (OAS) specification.",
     "type": "library",
     "license": "MIT",
